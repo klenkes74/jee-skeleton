@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="Multi EAR Application Demo"
+         xmlns="http://maven.apache.org/DECORATION/1.7.0"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 https://maven.apache.org/xsd/decoration-1.7.0.xsd">
+    <bannerRight>
+        <name>Kaiserpfalz EDV-Service</name>
+        <href>https://www.kaiserpfalz-edv.de/</href>
+        <title>Kaiserpfalz EDV-Service</title>
+    </bannerRight>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.2.1</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <sideBarEnabled>true</sideBarEnabled>
+        </fluidoSkin>
+    </custom>
+
+    <publishDate format="yyyy-MM-dd" position="right"/>
+
+    <body>
+        <breadcrumbs>
+            <item href="https://www.kaiserpfalz-edv.de/" name="Kaiserpfalz EDV-Service"/>
+        </breadcrumbs>
+
+        <menu ref="modules"/>
+
+        <menu ref="reports"/>
+
+        <footer>copyright &#9400; 2017 Kaiserpfalz EDV-Service, Roland T. Lichti</footer>
+    </body>
+</project>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.kaiserpfalz-edv.demo.jee.application1</groupId>
+        <artifactId>application1-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>application1</artifactId>
+    <packaging>ear</packaging>
+
+    <name>Demo Application 1 :: EAR</name>
+    <description>
+        This is a description for a multi-ear-application. This application provides module1 for the application 2.
+    </description>
+    <url>https://docu.kaiserpfalz-edv.de/projects/jeetester/${project.version}/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.demo.jee.application1</groupId>
+            <artifactId>module1</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <applicationName>${application-name}</applicationName>
+                    <displayName>${project.name}</displayName>
+                    <description>${project.description}</description>
+
+                    <security>
+                        <security-role id="admin_security_role">
+                            <role-name id="admin_role">manager</role-name>
+                        </security-role>
+                        <security-role id="user_security_role">
+                            <description>My cool description</description>
+                            <role-name id="user_role">user</role-name>
+                        </security-role>
+                    </security>
+
+                    <env-entries>
+                        <env-entry>
+                            <description>The database used for quartz.</description>
+                            <env-entry-name>quartz-ds</env-entry-name>
+                            <env-entry-type>java.lang.String</env-entry-type>
+                            <env-entry-value>java:jboss/datasources/ExampleDS</env-entry-value>
+                        </env-entry>
+                    </env-entries>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

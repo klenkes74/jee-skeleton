@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.kaiserpfalz-edv.demo.jee</groupId>
+    <artifactId>bom</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Demo Multi EAR Application :: Bill of materials</name>
+
+    <url>https://docu.kaiserpfalz-edv.de/projects/jeetester/bom</url>
+
+    <organization>
+        <name>Kaiserpfalz EDV-Service</name>
+        <url>https://www.kaiserpfalz-edv.de/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>klenkes</id>
+            <name>Roland T. Lichti</name>
+            <email>rlichti@kaiserpfalz-edv.de</email>
+            <url>https://www.lichti.de/</url>
+            <organization>Kaiserpfalz EDV-Service</organization>
+            <organizationUrl>https://www.kaiserpfalz-edv.de/</organizationUrl>
+            <roles>
+                <role>Army of me</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <site>
+            <id>JEE Multi EAR Application Demo</id>
+            <url>https://docu.kaiserpfalz-edv.de/projects/jeetester</url>
+        </site>
+    </distributionManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Announce List</name>
+            <subscribe>paladins-inn-announce-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-announce-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-announce@kaiserpfalz-edv.de</post>
+        </mailingList>
+        <mailingList>
+            <name>Users List</name>
+            <subscribe>paladins-inn-user-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-user-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-user@kaiserpfalz-edv.de</post>
+        </mailingList>
+        <mailingList>
+            <name>Developers List</name>
+            <subscribe>paladins-inn-developer-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-developer-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-developer@kaiserpfalz-edv.de</post>
+        </mailingList>
+    </mailingLists>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application1</groupId>
+                <artifactId>module1</artifactId>
+                <type>ejb</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application1</groupId>
+                <artifactId>module1</artifactId>
+                <type>ejb-client</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application2</groupId>
+                <artifactId>module2</artifactId>
+                <type>ejb</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application2</groupId>
+                <artifactId>module2</artifactId>
+                <type>ejb-client</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application1</groupId>
+                <artifactId>application1</artifactId>
+                <type>ear</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.kaiserpfalz-edv.demo.jee.application2</groupId>
+                <artifactId>application2</artifactId>
+                <type>ear</type>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.24</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.7.24</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.8.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>2.8.2</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.9.10</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wildfly.arquillian</groupId>
+                <artifactId>wildfly-arquillian-container-embedded</artifactId>
+                <version>2.0.0.Final</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.h-thurow</groupId>
+                <artifactId>simple-jndi</artifactId>
+                <version>0.15.0</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>dependencies</report>
+                                    <report>project-team</report>
+                                    <report>mailing-list</report>
+                                    <report>cim</report>
+                                    <report>issue-tracking</report>
+                                    <report>license</report>
+                                    <report>scm</report>
+                                    <report>summary</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+    </profiles>
+</project>

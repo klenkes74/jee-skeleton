@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.kaiserpfalz-edv.demo.jee</groupId>
+    <artifactId>jee-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Demo Multi EAR Application</name>
+    <url>https://docu.kaiserpfalz-edv.de/projects/jeetester/${project.version}/</url>
+
+
+    <properties>
+        <java.compiler.version>1.8</java.compiler.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <application-name>overwrite-me-at-application-level</application-name>
+    </properties>
+
+    <modules>
+        <module>bom</module>
+        <module>application1-parent</module>
+        <module>application2-parent</module>
+    </modules>
+
+
+    <organization>
+        <name>Kaiserpfalz EDV-Service</name>
+        <url>https://www.kaiserpfalz-edv.de/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>klenkes</id>
+            <name>Roland T. Lichti</name>
+            <email>rlichti@kaiserpfalz-edv.de</email>
+            <url>https://www.lichti.de/</url>
+            <organization>Kaiserpfalz EDV-Service</organization>
+            <organizationUrl>https://www.kaiserpfalz-edv.de/</organizationUrl>
+            <roles>
+                <role>Army of me</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <site>
+            <id>JEE Multi EAR Application Demo</id>
+            <url>${project.url}</url>
+        </site>
+    </distributionManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Announce List</name>
+            <subscribe>paladins-inn-announce-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-announce-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-announce@kaiserpfalz-edv.de</post>
+        </mailingList>
+        <mailingList>
+            <name>Users List</name>
+            <subscribe>paladins-inn-user-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-user-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-user@kaiserpfalz-edv.de</post>
+        </mailingList>
+        <mailingList>
+            <name>Developers List</name>
+            <subscribe>paladins-inn-developer-subscribe@kaiserpfalz-edv.de</subscribe>
+            <unsubscribe>paladins-inn-developer-unsubscribe@kaiserpfalz-edv.de</unsubscribe>
+            <post>paladins-inn-developer@kaiserpfalz-edv.de</post>
+        </mailingList>
+    </mailingLists>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.11.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>1.2.0.Alpha6</version>
+                    <configuration>
+                        <detail>true</detail>
+                        <batch>false</batch>
+                        <fail-on-error>false</fail-on-error>
+                        <commands>
+                            <command>
+                                /subsystem=transactions/:write-attribute(name=node-identifier,value=${application-name})
+                            </command>
+                            <command>/subsystem=logging/console=CONSOLE:write-attribute(name=level,value=TRACE)
+                            </command>
+                        </commands>
+                        <add-user>
+                            <users>
+                                <user>
+                                    <username>groupless</username>
+                                    <password>password</password>
+                                    <application-user>true</application-user>
+                                </user>
+                                <user>
+                                    <username>application</username>
+                                    <password>password</password>
+                                    <groups>
+                                        <group>admin</group>
+                                        <group>user</group>
+                                    </groups>
+                                    <application-user>true</application-user>
+                                </user>
+                                <user>
+                                    <username>admin</username>
+                                    <password>password</password>
+                                    <groups>
+                                        <group>admin</group>
+                                    </groups>
+                                    <application-user>false</application-user>
+                                </user>
+                            </users>
+                        </add-user>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>2.10.1</version>
+                    <configuration>
+                        <version>7</version>
+                        <defaultLibBundleDir>/lib</defaultLibBundleDir>
+                        <filtering>true</filtering>
+                        <skinnyWars>true</skinnyWars>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <ejbVersion>3.2</ejbVersion>
+                        <generateClient>true</generateClient>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                        </archive>
+                        <filterDeploymentDescriptor>true</filterDeploymentDescriptor>
+                        <clientIncludes>
+                            <include>**/api/*</include>
+                            <include>**/client/*</include>
+                        </clientIncludes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.5.1</version>
+                    <configuration>
+                        <source>${java.compiler.version}</source>
+                        <target>${java.compiler.version}</target>
+                        <compilerArgument>-Xlint:all</compilerArgument>
+                        <showWarnings>true</showWarnings>
+                        <showDeprecation>true</showDeprecation>
+                        <failOnError>true</failOnError>
+                        <detail>true</detail>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <detail>true</detail>
+                        <forkCount>4</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <failIfNoTests>true</failIfNoTests>
+                        <failIfNoSpecifiedTests>true</failIfNoSpecifiedTests>
+                        <includes>
+                            <include>**/*Test.class</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*IT.class</exclude>
+                            <exclude>**/*CT.class</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <detail>true</detail>
+                        <forkCount>4</forkCount>
+                        <reuseForks>true</reuseForks>
+                        <failIfNoTests>false</failIfNoTests>
+                        <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+                        <excludes>
+                            <exclude>**/*Test.class</exclude>
+                        </excludes>
+                        <includes>
+                            <include>**/*IT.class</include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.5.201505241946</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                        </systemPropertyVariables>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>prepare-agent-ut</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>report-ut</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>target/jacoco.exec</dataFile>
+                            </configuration>
+                        </execution>
+
+                        <execution>
+                            <id>prepare-agent-it</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                                <goal>report-integration</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>report-it</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>report-integration</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>target/jacoco.exec</dataFile>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <phase>post-integration-test</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <phase>post-integration-test</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>2.8.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/test/resources</directory>
+                <targetPath>${project.build.testOutputDirectory}</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${project.build.outputDirectory}</targetPath>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>index</report>
+                                    <report>project-team</report>
+                                    <report>mailing-list</report>
+                                    <report>cim</report>
+                                    <report>issue-tracking</report>
+                                    <report>license</report>
+                                    <report>scm</report>
+                                    <report>summary</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <version>3.6</version>
+                        <configuration>
+                            <linkXRef>true</linkXRef>
+                            <aggregate>true</aggregate>
+                            <includeTests>true</includeTests>
+                            <verbose>true</verbose>
+                            <minimumTokens>100</minimumTokens>
+                            <targetJdk>${java.compiler.version}</targetJdk>
+                            <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jxr-plugin</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>jxr</report>
+                                    <report>test-jxr</report>
+                                    <report>aggregate</report>
+                                    <report>test-aggregate</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>javadoc</report>
+                                    <report>aggregate</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.7.5.201505241946</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>report</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>javancss-maven-plugin</artifactId>
+                        <version>2.1</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>report</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
+                        <version>2.20</version>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>report</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <profile>
+            <id>arquillian</id>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!-- You need the maven dependency plugin to download locally a zip with the server, unless you provide your own, it will download under the /target directory -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>2.10</version>
+                            <executions>
+                                <execution>
+                                    <id>unpack</id>
+                                    <phase>process-test-classes</phase>
+                                    <goals>
+                                        <goal>unpack</goal>
+                                    </goals>
+                                    <configuration>
+                                        <artifactItems>
+                                            <artifactItem>
+                                                <groupId>org.wildfly</groupId>
+                                                <artifactId>wildfly-dist</artifactId>
+                                                <version>10.1.0.Final</version>
+                                                <type>zip</type>
+                                                <overWrite>false</overWrite>
+                                                <outputDirectory>target</outputDirectory>
+                                            </artifactItem>
+                                        </artifactItems>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>2.19.1</version>
+                            <executions>
+                                <execution>
+                                    <id>default</id>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                    <phase>test</phase>
+                                    <configuration>
+                                        <forkCount>4</forkCount>
+                                        <reuseForks>true</reuseForks>
+                                        <failIfNoTests>true</failIfNoTests>
+                                        <failIfNoSpecifiedTests>true</failIfNoSpecifiedTests>
+                                        <includes>
+                                            <include>**/*Test.class</include>
+                                        </includes>
+                                        <excludes>
+                                            <exclude>**/*IT.class</exclude>
+                                            <exclude>**/*CT.class</exclude>
+                                        </excludes>
+                                    </configuration>
+                                </execution>
+
+                                <execution>
+                                    <id>arquillian</id>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                    <phase>integration-test</phase>
+                                    <configuration>
+                                        <!-- Fork every test because it will launch a separate AS instance -->
+                                        <forkCount>1</forkCount>
+                                        <reuseForks>false</reuseForks>
+                                        <systemPropertyVariables>
+                                            <java.util.logging.manager>org.jboss.logmanager.LogManager
+                                            </java.util.logging.manager>
+                                        </systemPropertyVariables>
+                                        <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                                        <testNGArtifactName>org.testng:testng</testNGArtifactName>
+                                        <junitArtifactName>junit:junit</junitArtifactName>
+                                        <excludes>
+                                            <exclude>**/*Test.class</exclude>
+                                        </excludes>
+                                        <includes>
+                                            <include>**/*CT.class</include><!-- Container Tests -->
+                                        </includes>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.kaiserpfalz-edv.demo.jee.application2</groupId>
+        <artifactId>application2-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>application2</artifactId>
+    <packaging>ear</packaging>
+
+    <name>Demo Application 2 :: EAR</name>
+    <description>
+        This is a description for a multi-ear-application. The module2 in this application
+        calls the module1 of the other application.
+    </description>
+    <url>https://docu.kaiserpfalz-edv.de/projects/jeetester/${project.version}/</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.kaiserpfalz-edv.demo.jee.application2</groupId>
+            <artifactId>module2</artifactId>
+            <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <version>7</version>
+                    <applicationName>${application-name}</applicationName>
+                    <displayName>${project.name}</displayName>
+                    <description>${project.description}</description>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
